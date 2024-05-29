@@ -23,7 +23,7 @@ exports.createPost = async(req,res)=>{
 
 exports.getAllPosts = async(req,res)=>{
     try {
-        const posts = await Post.find({});
+        const posts = await Post.find({}) //.populate('likes').populate('comments')
         res.status(200).json({
             success : true,
             posts : posts

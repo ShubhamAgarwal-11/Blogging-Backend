@@ -5,7 +5,7 @@ exports.createComments = async(req,res)=>{
         const {body,user,post} = req.body;
     
         const commentObj = new Comment({
-            body,user
+            body,user,post
         });
         const savedComment = await commentObj.save();
         const updatedPost = await Post.findByIdAndUpdate({_id : post}, {$push : {comments : savedComment._id}} , {new : true})
@@ -34,4 +34,24 @@ exports.getAllComments = async(req,res) =>{
             error : error.message
         })
     }
+}
+
+exports.deleteComment = async(req,res)=>{
+    try {
+        const id = req.params.id; 
+        const {post} = req.body;
+    
+        await Comment.findByIdAndDelete({_id : id})
+        const updatedPost = await Post.findByIdAndUpdate({_id : post}, {$pull : {comments : id}}, {new : true})
+        res.status(200).json({
+            success : true,
+            updatedPost : updatedPost
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success : true,
+            error : error.message
+        })
+    }
+
 }
