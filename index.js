@@ -5,6 +5,7 @@ const port = process.env.PORT || 4000;
 // connect to db.
 const db = require('./db/db');
 db();
+app.use(express.json())
 app.use('/api/v1/',require('./routers/index'));
 
 
